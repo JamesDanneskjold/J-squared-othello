@@ -1,6 +1,11 @@
 #include "player.h"
 
 /*
+ * This is a comment added by James for the initial section of the
+ * program.
+ */
+
+/*
  * Constructor for the player; initialize everything here. The side your AI is
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish 
  * within 30 seconds.
