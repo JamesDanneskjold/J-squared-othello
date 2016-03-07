@@ -46,5 +46,28 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
      */ 
+    
+    /* James: Work starts here.  The first bit I am adding is to create
+     * a score that is the Resulting difference between players of the
+     * move multiplied by a multiplier.  The multiplier is simply 1 for 
+     * normal square, 3 for edge square moves, and 5 for corner moves.
+     */
+     
+     // Loop over all moves
+     
+     // Check if a certain move is legal somehow
+		// First the move must occur on a square without an occupant
+		// Next there must be a square of opposite color next to it
+		// If you go far enough in that direction there must be a square
+		// of your color.
+			// Important idea, set score to -64 and only change if the
+			// If still -64, no legal move was possible
+     // Calculate the score if that were the final board
+     // Determine the multiplier due to that move
+     // Calculate the score
+     // Keep track of the highest score
+     
+     // Then end of my code
+    
     return NULL;
 }
