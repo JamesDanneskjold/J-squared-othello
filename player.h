@@ -4,6 +4,7 @@
 #include <iostream>
 #include "common.h"
 #include "board.h"
+#include <vector>
 using namespace std;
 
 class Player {
@@ -11,6 +12,18 @@ class Player {
 public:
     Player(Side side);
     ~Player();
+
+    Side side;
+    Board board;
+
+//*****************Julia Additions*****************
+    int contents[8][8];
+    Side OppSide();
+    void doAMove(Move *move, int player);
+    Move* findMove();
+    vector<Move*> findMoves();
+    int evaluateMove(Move move);
+//*************************************************
     
     Move *doMove(Move *opponentsMove, int msLeft);
 

@@ -24,6 +24,7 @@ public:
     bool isDone();
     bool hasMoves(Side side);
     bool checkMove(Move *m, Side side);
+    void add(Side side, int x, int y);
     void doMove(Move *m, Side side);
     int count(Side side);
     int countBlack();
