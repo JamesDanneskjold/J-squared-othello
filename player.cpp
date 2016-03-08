@@ -49,9 +49,65 @@ Move* Player::findMove()
     return NULL;
 }
 
-//vector<Move*> Player::findMoves() {}
+Move* Player::findMoves()
+{
+	int val, best = -10000;
+	Move result = Move(0, 0);
+	if (board.hasMoves(side)) 
+    {
+        Move move = Move(0, 0);
+        for (int i = 0; i < 8; i++) 
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                 move = Move(i, j);
+                 if (board.checkMove(&move, side)) 
+                 {
+					 val = evaluateMove(move);
+					 if (move.getX() == 0 || move.getX() == 7)
+					 {
+						 if (move.getY() == 0 || move.getY() == 7)
+						 {
+							 val += 40;
+						 }
+						 else
+						 {
+							 val += 20;
+						 }
+					 }
+					 else if (move.getY() == 0 || move.getY() == 7)
+					 {
+						 val += 20;
+					 }
+					 if(val > best)
+					 {
+						 result = Move(i, j);
+						 best = val;
+					 }
+                 }
+            }
+       }
+    }
+    else
+    {
+		return NULL;
+	}
+	Move* output = new Move(result);
+	return output;
+}
 
-//int Player::evaluateMove(Move move) {}
+int Player::evaluateMove(Move move)
+{
+	Board tempboard = board;
+	Move *testmove = &move;
+	tempboard.doMove(testmove, side);
+	int val = tempboard.countBlack() - tempboard.countWhite();
+	if(side == 0)
+	{
+		val *= -1;
+	}
+	return val;
+}
 
 
 /*
@@ -67,10 +123,16 @@ Move* Player::findMove()
  * return NULL.
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
+	/*
     //doAMove(opponentsMove, -1);
     board.doMove(opponentsMove, OppSide());
     Move* move = findMove();
     //doAMove(move, 1);
     board.doMove(move, side);
     return move;
+    */
+    board.doMove(opponentsMove, OppSide());
+    Move* move = findMoves();
+	board.doMove(move, side);
+	return move;
 }

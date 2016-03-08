@@ -20,7 +20,7 @@ public:
     Side OppSide();
     void doAMove(Move *move, int player);
     Move* findMove();
-    vector<Move*> findMoves();
+    Move* findMoves();
     int evaluateMove(Move move);
 
     
