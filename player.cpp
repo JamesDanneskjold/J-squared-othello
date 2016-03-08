@@ -44,7 +44,7 @@ Move* Player::findMove()
                      return move;
                  }
             }
-       }
+        }
     }
     return NULL;
 }
