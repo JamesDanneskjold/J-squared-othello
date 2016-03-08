@@ -201,12 +201,12 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     */
     if(testingMinimax)
     {
-		board.doMove(opponentsMove, OppSide());
+        board.doMove(opponentsMove, OppSide());
         Move* move = findMoveMinimax();
         board.doMove(move, side);
         return move;
     }
-        else
+    else
     {	
         board.doMove(opponentsMove, OppSide());
         Move* move = findMoveHeuristic();
