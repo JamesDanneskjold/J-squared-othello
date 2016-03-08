@@ -15,21 +15,8 @@
 Player::Player(Side side) {
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
-    side = side;
-    board = Board();
-    /*for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            contents[i][j] = 0;}}
-    if (side == BLACK) {
-        contents[3][3] = -1;
-        contents[4][4] = -1;
-        contents[3][4] = 1;
-        contents[4][3] = 1;}
-    else {
-        contents[3][3] = 1;
-        contents[4][4] = 1;
-        contents[3][4] = -1;
-        contents[4][3] = -1;}*/
+    this->side = side;
+    Board board = Board();
 }
 
 /*
@@ -42,114 +29,24 @@ Side Player::OppSide() {
     if (side == BLACK) {return WHITE;}
     else {return BLACK;}}
 
-/*void Player::doAMove(Move *move, int player) {
-    int x = move->x;
-    int y = move->y;
-    board.set(OppSide(), x, y);
-    contents[x][y] = player; //player is one for self, -1 for opponent
-    int i = 1;
-    while (y + i < 8) {
-        if (contents[xval][yval + i] == -player) {i++;}
-        else {if (i == 1) {break;}
-              else {
-                  for (int j = 1; j < i; j++) {
-                      board.set(OppSide(), x, y + j);
-                      contents[x][y + j] = player;}
-                  break;}
-        }
-    }
-    while (y - i > 0) {
-        if (contents[x][y - i] == -player) {i++;}
-        else {if (i == 1) {break;}
-              else {
-                  for (int j = 1; j < i; j++) {
-                      board.set(OppSide(), x, y - j);
-                      contents[x][y - j] = player;}
-                  break;}
-        }
-    }
-    while (x + i < 8) {
-        if (contents[x + i][y] == -player) {i++;}
-        else {if (i == 1) {break;}
-              else {
-                  for (int j = 1; j < i; j++) {
-                      board.set(OppSide(), x + j, y);
-                      contents[x + j][y] = player;}
-                  break;}
-        }
-    }
-    while (x - i > 0) {
-        if (contents[x - i][y] == -player) {i++;}
-        else {if (i == 1) {break;}
-              else {
-                  for (int j = 1; j < i; j++) {
-                      board.set(OppSide(), x - j, y);
-                      contents[x - j][y] = player;}
-                  break;}
-        }
-    }
-    while ((x + i < 8) && (y + i < 8)) {
-        if (contents[x + i][y + i] == -player) {i++;}
-        else {if (i == 1) {break;}
-              else {
-                  for (int j = 1; j < i; j++) {
-                      board.set(OppSide(), x + j, y + j);
-                      contents[x + j][y + j] = player;}
-                  break;}
-        }
-    }
-    while ((x + i < 8) && (y - i > 0)) {
-        if (contents[x + i][y - i] == -player) {i++;}
-        else {if (i == 1) {break;}
-              else {
-                  for (int j = 1; j < i; j++) {
-                      board.set(OppSide(), x + j, y - j);
-                      contents[x + j][y - j] = player;}
-                  break;}
-        }
-    }
-    while ((x - i > 0) && (y + i < 8)) {
-        if (contents[x - i][y + i] == -player) {i++;}
-        else {if (i == 1) {break;}
-              else {
-                  for (int j = 1; j < i; j++) {
-                      board.set(OppSide(), x - j, y + j);
-                      contents[x - j][y + j] = player;}
-                  break;}
-        }
-    }
-    while ((x - i > 0) && (y - i > 0) {
-        if (contents[x - i][y - i] == -player) {i++;}
-        else {if (i == 1) {break;}
-              else {
-                  for (int j = 1; j < i; j++) {
-                      board.set(OppSide(), x - j, y - j);
-                      contents[x - j][y - j] = player;}
-                  break;}
-        }
-    }
-}*/
-
 Move* Player::findMove() 
 {
-	if (board.hasMoves(side)) 
+    if (board.hasMoves(side)) 
+    {
+        Move *move = new Move(0, 0);
+        for (int i = 0; i < 8; i++) 
         {
-		Move *move = new Move(0, 0);
-		for (int i = 0; i < 8; i++) 
-		{
-			for (int j = 0; j < 8; j++)
-			{
-				*move = Move(i, j);
-
-				if (board.checkMove(move, side)) 
-				{
-					std::cerr << move->x << move->y << endl;
-					return move;
-				}
-			}
-		}
-	}
-	return NULL;
+            for (int j = 0; j < 8; j++)
+            {
+                *move = Move(i, j);
+                 if (board.checkMove(move, side)) 
+                 {
+                     return move;
+                 }
+            }
+       }
+    }
+    return NULL;
 }
 
 //vector<Move*> Player::findMoves() {}
@@ -172,14 +69,8 @@ Move* Player::findMove()
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
     //doAMove(opponentsMove, -1);
     board.doMove(opponentsMove, OppSide());
-    std::cerr << "TEST1" << endl;
     Move* move = findMove();
-    std::cerr << "TEST2" << endl;
-    // NOTICE THAT THE BELOW PRINT DOESNT GIVE THE SAME RESULT AS IN THE
-    // FUNCTION THIS IS PROBABLY THE PROBLEM
-    std::cerr << move->x << move->y << endl;
     //doAMove(move, 1);
     board.doMove(move, side);
-    std::cerr << "TEST3" << endl;
     return move;
 }

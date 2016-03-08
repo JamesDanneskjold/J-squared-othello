@@ -16,14 +16,13 @@ public:
     Side side;
     Board board;
 
-//*****************Julia Additions*****************
-    int contents[8][8];
+
     Side OppSide();
     void doAMove(Move *move, int player);
     Move* findMove();
     vector<Move*> findMoves();
     int evaluateMove(Move move);
-//*************************************************
+
     
     Move *doMove(Move *opponentsMove, int msLeft);
 
