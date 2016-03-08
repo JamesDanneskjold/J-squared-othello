@@ -49,7 +49,7 @@ Move* Player::findMove()
     return NULL;
 }
 
-Move* Player::findMoves()
+Move* Player::findMoveHeuristic()
 {
 	int val, best = -10000;
 	Move result = Move(0, 0);
@@ -63,22 +63,8 @@ Move* Player::findMoves()
                  move = Move(i, j);
                  if (board.checkMove(&move, side)) 
                  {
-					 val = evaluateMove(move);
-					 if (move.getX() == 0 || move.getX() == 7)
-					 {
-						 if (move.getY() == 0 || move.getY() == 7)
-						 {
-							 val += 40;
-						 }
-						 else
-						 {
-							 val += 20;
-						 }
-					 }
-					 else if (move.getY() == 0 || move.getY() == 7)
-					 {
-						 val += 20;
-					 }
+					 val = evaluateMove(move, board);
+					 val = heuristicChange(move, val);
 					 if(val > best)
 					 {
 						 result = Move(i, j);
@@ -96,9 +82,41 @@ Move* Player::findMoves()
 	return output;
 }
 
-int Player::evaluateMove(Move move)
+Move* Player::findMoveMinimax()
 {
-	Board tempboard = board;
+	int val, best = -10000;
+	Move result = Move(0, 0);
+	if (board.hasMoves(side))
+	{
+		Move move = Move(0, 0);
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				move = Move(i, j);
+				if (board.checkMove(&move, side))
+				{
+					val = findWorst(move);
+					if (val > best)
+					{
+						result = Move(i, j);
+						best = val;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		return NULL;
+	}
+	Move* output = new Move(result);
+	return output;
+}
+
+int Player::evaluateMove(Move move, Board testboard)
+{
+	Board tempboard = testboard;
 	Move *testmove = &move;
 	tempboard.doMove(testmove, side);
 	int val = tempboard.countBlack() - tempboard.countWhite();
@@ -109,6 +127,54 @@ int Player::evaluateMove(Move move)
 	return val;
 }
 
+int Player::heuristicChange(Move move, int val)
+{
+	if (move.getX() == 0 || move.getX() == 7)
+	{
+	     if (move.getY() == 0 || move.getY() == 7)
+		 {
+			 val += 40;
+		 }
+		 else
+		 {
+			 val += 20;
+		 }
+	}
+	else if (move.getY() == 0 || move.getY() == 7)
+	{
+        val += 20;
+	}
+	return val;
+}
+
+int Player::findWorst(Move move)
+{
+	Board tempboard = board;
+	Move *firstmove = &move;
+	tempboard.doMove(firstmove, side);
+	int val, worst = tempboard.countBlack() - tempboard.countWhite();
+	if (tempboard.hasMoves(OppSide())) 
+    {
+        Move move = Move(0, 0);
+        for (int i = 0; i < 8; i++) 
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                 move = Move(i, j);
+                 if (tempboard.checkMove(&move, OppSide())) 
+                 {
+					 val = evaluateMove(move, tempboard);
+					 if(val < worst)
+					 {
+						 worst = val;
+					 }
+                 }
+            }
+       }
+    }
+    return worst;
+}	
+	
 
 /*
  * Compute the next move given the opponent's last move. Your AI is
@@ -131,8 +197,16 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     board.doMove(move, side);
     return move;
     */
-    board.doMove(opponentsMove, OppSide());
-    Move* move = findMoves();
+    
+    /*board.doMove(opponentsMove, OppSide());
+    Move* move = findMoveHeuristic();
+	board.doMove(move, side);
+	return move;*/
+	
+	board.doMove(opponentsMove, OppSide());
+	Move* move = findMoveMinimax();
 	board.doMove(move, side);
 	return move;
+	
+	
 }

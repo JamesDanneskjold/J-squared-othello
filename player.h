@@ -20,8 +20,11 @@ public:
     Side OppSide();
     void doAMove(Move *move, int player);
     Move* findMove();
-    Move* findMoves();
-    int evaluateMove(Move move);
+    Move* findMoveHeuristic();
+    Move* findMoveMinimax();
+    int evaluateMove(Move move, Board testboard);
+    int heuristicChange(Move move, int val);
+    int findWorst(Move move);
 
     
     Move *doMove(Move *opponentsMove, int msLeft);
