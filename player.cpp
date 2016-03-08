@@ -138,7 +138,7 @@ for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
         *move = Move(i, j);
         std::cerr << move->x << move->y << endl;
-        if (board.checkMove(move, OppSide())) {return move;}}}}
+        if (board.checkMove(move, side)) {return move;}}}}
 return NULL;
 }
 
