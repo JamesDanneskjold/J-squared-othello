@@ -14,7 +14,7 @@
  */
 Player::Player(Side side) {
     // Will be set to true in test_minimax.cpp.
-    testingMinimax = false;
+    testingMinimax = true;
     this->side = side;
     Board board = Board();
 }
@@ -198,15 +198,16 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return move;
     */
     
-    /*board.doMove(opponentsMove, OppSide());
+    if (!testingMinimax) {
+    board.doMove(opponentsMove, OppSide());
     Move* move = findMoveHeuristic();
 	board.doMove(move, side);
-	return move;*/
-	
+	return move;}
+    else {
 	board.doMove(opponentsMove, OppSide());
 	Move* move = findMoveMinimax();
 	board.doMove(move, side);
-	return move;
+	return move;}
 	
 	
 }
