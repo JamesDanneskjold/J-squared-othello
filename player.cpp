@@ -18,7 +18,7 @@ Player::Player(Side side) {
     side = side;
     board = Board();
     for (int i = 0; i < 8; i++) {
-        for (int j = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
             contents[i][j] = 0;}}
     if (side == BLACK) {
         contents[3][3] = -1;
