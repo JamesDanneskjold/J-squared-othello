@@ -190,7 +190,7 @@ int Player::findWorst(Move move)
  * return NULL.
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
-    // This is the very naive initial AI that just pick
+    // This is the very naive initial AI that just picks
     // the first move it finds.
     
     /*
