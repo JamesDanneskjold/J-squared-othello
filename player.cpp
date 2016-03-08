@@ -17,8 +17,13 @@ Player::Player(Side side) {
     testingMinimax = false;
     side = side;
     board = Board();
-    for (int i = 0; i < 8; i++) {
+<<<<<<< HEAD
+    /*for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
+=======
+    /*for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+>>>>>>> 80079443382fd3324a4092d31b9e20164c558201
             contents[i][j] = 0;}}
     if (side == BLACK) {
         contents[3][3] = -1;
@@ -29,7 +34,7 @@ Player::Player(Side side) {
         contents[3][3] = 1;
         contents[4][4] = 1;
         contents[3][4] = -1;
-        contents[4][3] = -1;}
+        contents[4][3] = -1;}*/
 }
 
 /*
@@ -130,16 +135,26 @@ Side Player::OppSide() {
     }
 }*/
 
-Move* Player::findMove() {
-if (board.hasMoves(side)) {
-Move temp = Move(0, 0);
-Move* move = &temp;
-for (int i = 0; i < 8; i++) {
-    for (int j = 0; j < 8; j++) {
-        *move = Move(i, j);
-        std::cerr << move->x << move->y << endl;
-        if (board.checkMove(move, side)) {return move;}}}}
-return NULL;
+Move* Player::findMove() 
+{
+	if (board.hasMoves(side)) 
+	{
+		Move temp = Move(0, 0);
+		Move* move = &temp;
+		for (int i = 0; i < 8; i++) 
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				*move = Move(i, j);
+				if (board.checkMove(move, side)) 
+				{
+					std::cerr << move->x << move->y << endl;
+					return move;
+				}
+			}
+		}
+	}
+	return NULL;
 }
 
 //vector<Move*> Player::findMoves() {}
@@ -162,8 +177,14 @@ return NULL;
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
     //doAMove(opponentsMove, -1);
     board.doMove(opponentsMove, OppSide());
+    std::cerr << "TEST1" << endl;
     Move* move = findMove();
+    std::cerr << "TEST2" << endl;
+    // NOTICE THAT THE BELOW PRINT DOESNT GIVE THE SAME RESULT AS IN THE
+    // FUNCTION THIS IS PROBABLY THE PROBLEM
+    std::cerr << move->x << move->y << endl;
     //doAMove(move, 1);
     board.doMove(move, side);
+    std::cerr << "TEST3" << endl;
     return move;
 }
