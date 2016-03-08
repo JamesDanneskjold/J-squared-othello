@@ -206,7 +206,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         board.doMove(move, side);
         return move;
     }
-	else
+        else
     {	
         board.doMove(opponentsMove, OppSide());
         Move* move = findMoveHeuristic();
