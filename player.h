@@ -17,14 +17,16 @@ public:
     Board board;
 
 
-    Side OppSide();
+    Side OppSide(Side side);
     void doAMove(Move *move, int player);
     Move* findMove();
+    vector<Move*> findMoves(Board temp);
     Move* findMoveHeuristic();
     Move* findMoveMinimax();
     int evaluateMove(Move move, Board testboard);
     int heuristicChange(Move move, int val);
-    int findWorst(Move move);
+    int findWorst(Move move, Board test);
+    int negascout(Board tempboard, int depth, int a, int b, int color, Side side);
 
     
     Move *doMove(Move *opponentsMove, int msLeft);

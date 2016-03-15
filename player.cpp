@@ -1,6 +1,7 @@
 //Julia was here!
 //Here is a trivial change!
 #include "player.h"
+#include "iostream"
 
 /*
  * This is a comment added by James for the initial section of the
@@ -26,7 +27,7 @@ Player::Player(Side side)
 Player::~Player() {
 }
 
-Side Player::OppSide() {
+Side Player::OppSide(Side side) {
     if (side == BLACK) {return WHITE;}
     else {return BLACK;}}
 
@@ -48,6 +49,24 @@ Move* Player::findMove()
         }
     }
     return NULL;
+}
+
+vector<Move*> Player::findMoves(Board temp) 
+{
+	vector<Move*> moves;
+	Move *move = new Move(0, 0);
+	for (int i = 0; i < 8; i++) 
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			*move = Move(i, j);
+			 if (temp.checkMove(move, side)) 
+			 {
+				 moves.push_back(move);
+			 }
+		}
+	}
+	return moves;
 }
 
 Move* Player::findMoveHeuristic()
@@ -97,7 +116,7 @@ Move* Player::findMoveMinimax()
                 move = Move(i, j);
                 if (board.checkMove(&move, side))
                 {
-                    val = findWorst(move);
+                    val = findWorst(move, board);
                     if (val > best)
                     {
                         result = Move(i, j);
@@ -148,13 +167,13 @@ int Player::heuristicChange(Move move, int val)
     return val;
 }
 
-int Player::findWorst(Move move)
+int Player::findWorst(Move move, Board test)
 {
-    Board tempboard = board;
+    Board tempboard = test;
     Move *firstmove = &move;
     tempboard.doMove(firstmove, side);
     int val, worst = tempboard.countBlack() - tempboard.countWhite();
-    if (tempboard.hasMoves(OppSide())) 
+    if (tempboard.hasMoves(OppSide(side))) 
     {
         Move move = Move(0, 0);
         for (int i = 0; i < 8; i++) 
@@ -162,7 +181,7 @@ int Player::findWorst(Move move)
             for (int j = 0; j < 8; j++)
             {
                  move = Move(i, j);
-                 if (tempboard.checkMove(&move, OppSide())) 
+                 if (tempboard.checkMove(&move, OppSide(side))) 
                  {
                      val = evaluateMove(move, tempboard);
                      if(val < worst)
@@ -174,7 +193,50 @@ int Player::findWorst(Move move)
        }
     }
     return worst;
-}	
+}
+
+int Player::negascout(Board tempboard, int depth, int a, int b, int color, Side side)
+{
+	Board temp = tempboard;
+	vector<Move*> moves;
+	int score;
+    if(depth == 0)
+    {
+        return color * (tempboard.countBlack() - tempboard.countWhite());
+	}
+	if(tempboard.hasMoves(side))
+	{
+	     moves = findMoves(tempboard);
+	}
+    for(unsigned int i = 0; i < moves.size(); i++)
+    {
+		temp = tempboard;
+        if(i != 0)
+        {
+			temp.doMove(moves[i], side);
+            score = -1 * negascout(temp, depth-1, -a-1, -a, -color, OppSide(side));
+            temp = tempboard;
+            if (a < score && score < b)
+            {
+				temp.doMove(moves[i], side);
+                score = -negascout(temp, depth-1, -b, -score, -color, OppSide(side));
+                temp = tempboard;
+			}
+		}
+        else
+        {
+			temp.doMove(moves[i], side);
+            score = -negascout(temp, depth-1, -b, -a, -color, OppSide(side));
+            temp = tempboard;
+		}
+        a = max(a, score);
+        if (a >= b)
+        {
+            break;
+        }
+	}
+    return a;
+}
 	
 
 /*
@@ -199,7 +261,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     board.doMove(move, side);
     return move;
     */
-    if(testingMinimax)
+    /*if(testingMinimax)
     {
         board.doMove(opponentsMove, OppSide());
         Move* move = findMoveMinimax();
@@ -212,5 +274,33 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         Move* move = findMoveHeuristic();
         board.doMove(move, side);
         return move;
+    }*/
+    board.doMove(opponentsMove, OppSide(side));
+    int val, best = -10000, i_best = 0, j_best = 0;
+    if (board.hasMoves(side))
+    {
+        Move move = Move(0, 0);
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                move = Move(i, j);
+                if (board.checkMove(&move, side))
+                {
+                    val = negascout(board, 3, -1000, 1000, 1, side);
+                    if (val > best)
+                    {
+                        i_best = i;
+                        j_best = j;
+                        best = val;
+                    }
+                }
+            }
+        }
+        Move* output = new Move(i_best, j_best);
+        board.doMove(output, side);
+        return output;
     }
+    return NULL;
+    
 }
