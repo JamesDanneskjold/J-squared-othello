@@ -51,6 +51,7 @@ Move* Player::findMove()
     return NULL;
 }
 
+
 vector<Move*> Player::findMoves(Board temp) 
 {
 	vector<Move*> moves;
@@ -262,6 +263,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return move;
     */
     /*if(testingMinimax)
+
+    if(testingMinimax)
     {
         board.doMove(opponentsMove, OppSide());
         Move* move = findMoveMinimax();
