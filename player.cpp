@@ -50,6 +50,27 @@ Move* Player::findMove()
     return NULL;
 }
 
+vector<Move*> Player::findMoves()
+{
+    if (board.hasMoves(side))
+    {
+        Move *move = new Move(0, 0);
+        vector<Move*> moves;
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                *move = Move(i, j);
+                 if (board.checkMove(move, side))
+                 {
+                     moves.push_back(move);
+                 }
+            }
+        }
+    }
+    return moves;
+}
+
 Move* Player::findMoveHeuristic()
 {
     int val, best = -10000;
@@ -175,6 +196,7 @@ int Player::findWorst(Move move)
     }
     return worst;
 }	
+
 	
 
 /*
